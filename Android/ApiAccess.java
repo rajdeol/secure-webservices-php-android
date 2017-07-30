@@ -21,6 +21,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * class to handle hand shake with API
+ * Created by rajinder deol on 17/3/15.
+ */
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -35,6 +40,8 @@ public class ApiAccess {
     protected String time_stamp;
     protected static final String HEXES = "0123456789abcdef";
 
+    protected static final int DEFAULT_TIMEOUT = 120 * 1000;
+
     // header name in which we will send APi key
     protected final String API_KEY_HEADER = "API-KEY";
 
@@ -44,14 +51,20 @@ public class ApiAccess {
     // header name in which we will send Unix time stamp
     protected final String TIME_STAMP_HEADER = "API-REQUEST-TIME";
 
+    // 
+    protected final int DEFAULT_READ_TIMEOUT = 10000;
+
     String charset = "UTF-8";
     HttpURLConnection conn;
     DataOutputStream wr;
-    StringBuilder result;
+    StringBuilder result, sbParams;
     URL urlObj;
     JSONObject jObj = null;
-    StringBuilder sbParams;
     String paramsString;
+
+    /**
+     * constructor to set default values
+     */
 
     public ApiAccess() {
         // set time stamp, equivlant of php microtime(TRUE)
@@ -99,8 +112,8 @@ public class ApiAccess {
                     conn.setRequestProperty(key, value);
                 }
 
-                conn.setReadTimeout(10000);
-                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(DEFAULT_READ_TIMEOUT);
+                conn.setConnectTimeout(DEFAULT_TIMEOUT);
 
                 conn.connect();
 
@@ -139,7 +152,7 @@ public class ApiAccess {
                     conn.setRequestProperty(key, value);
                 }
 
-                conn.setConnectTimeout(15000);
+                conn.setConnectTimeout(DEFAULT_TIMEOUT);
 
                 conn.connect();
 
